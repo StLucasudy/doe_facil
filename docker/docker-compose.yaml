@@ -1,0 +1,13 @@
+services:
+  db_doe_facil:
+    image: postgres:15.3-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: devUser
+      POSTGRES_PASSWORD: devPass
+      POSTGRES_DB: doeFacil
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+      - ./init-scripts:/docker-entrypoint-initdb.d
+volumes:
+  pgdata:
