@@ -5,5 +5,7 @@ public record ColaboradorRespDto(
         String cpf,
         String email,
         String telefone,
-        String cargo
+        String cargo,
+        Long idEndereco,
+        Long idOng
 ){}

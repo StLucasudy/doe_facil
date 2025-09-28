@@ -1,4 +1,4 @@
-package br.com.doefacil.srv.colaboradores.service;
+package br.com.doefacil.srv.colaboradores.service.iservice;
 
 import br.com.doefacil.srv.colaboradores.repository.entity.EnderecoEntity;
 
