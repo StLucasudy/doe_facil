@@ -8,7 +8,6 @@ public class EnderecoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
     @Column(name = "rua")
     private String rua;
@@ -23,8 +22,7 @@ public class EnderecoEntity {
     public EnderecoEntity() {
     }
 
-    public EnderecoEntity(Long id, String rua, String numero, String cep, String complemento) {
-        this.id = id;
+    public EnderecoEntity(String rua, String numero, String cep, String complemento) {
         this.rua = rua;
         this.numero = numero;
         this.cep = cep;

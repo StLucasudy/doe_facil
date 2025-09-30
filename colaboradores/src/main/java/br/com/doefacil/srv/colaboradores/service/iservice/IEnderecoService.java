@@ -8,4 +8,5 @@ public interface IEnderecoService {
 
     EnderecoEntity findByID(Long id);
 
+    EnderecoEntity findByParam(String cep, String numero, String rua);
 }
