@@ -1,0 +1,26 @@
+meta {
+  name: Criar nova ong
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/ongs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "De mulher para mulher",
+    "cnpj": "70386172000120",
+    "telefone": "1724578981",
+    "email": "demulher@gmail.org.br",
+    "area_autacao": "social",
+    "nome_rua": "Rua XV de Novembro"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
