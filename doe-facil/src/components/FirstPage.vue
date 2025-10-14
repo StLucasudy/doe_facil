@@ -36,7 +36,7 @@ const cadastroClick = () => {
     /* coloca uma borda vermelha de 5px na div*/
     row-gap: 10px;
     /* coloca um espaço de 5px entre cada elemento*/
-    padding: 10px;
+        
 }
 
 button {
