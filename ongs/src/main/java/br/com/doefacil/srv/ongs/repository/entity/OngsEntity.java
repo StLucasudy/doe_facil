@@ -20,16 +20,19 @@ public class OngsEntity {
     private String telefone;
     @Column(name = "area_atuacao")
     private String area_atuacao;
+    @Column(name = "senha")
+    private String senha;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;
 
-    public OngsEntity(String nome, String cnpj, String email, String telefone, String area_atuacao, EnderecoEntity endereco) {
+    public OngsEntity(String nome, String cnpj, String email, String telefone, String area_atuacao, String senha ,EnderecoEntity endereco) {
         this.nome = nome;
         this.cnpj = cnpj;
         this.email = email;
         this.telefone = telefone;
         this.area_atuacao = area_atuacao;
+        this.senha = senha;
         this.endereco = endereco;
     }
 
@@ -61,6 +64,10 @@ public class OngsEntity {
         return area_atuacao;
     }
 
+    public String getSenha() {
+        return senha;
+    }
+
     public EnderecoEntity getEndereco() {
         return endereco;
     }
@@ -83,6 +90,10 @@ public class OngsEntity {
 
     public void setAreaAtuacao(String areaAtuacao) {
         this.area_atuacao = areaAtuacao;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public void setEndereco(EnderecoEntity endereco) {

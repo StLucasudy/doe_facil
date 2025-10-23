@@ -32,6 +32,7 @@ public class OngsService implements IOngsService {
                         req.email(),
                         req.telefone(),
                         req.area_autacao(),
+                        req.senha(),
                         endereco
                 )
         );

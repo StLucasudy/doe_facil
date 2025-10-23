@@ -14,6 +14,7 @@ CREATE TABLE ongs (
     telefone VARCHAR(20),
     email VARCHAR(100),
     area_atuacao VARCHAR(100),
+    senha VARCHAR(100),
     endereco_id INT REFERENCES enderecos(id) ON DELETE SET NULL
 );
 
