@@ -6,6 +6,7 @@ import br.com.doefacil.srv.ongs.repository.EnderecoRepository;
 import br.com.doefacil.srv.ongs.repository.OngRepository;
 import br.com.doefacil.srv.ongs.repository.entity.EnderecoEntity;
 import br.com.doefacil.srv.ongs.repository.entity.OngsEntity;
+import br.com.doefacil.srv.ongs.service.exception.PassWordNotMatch;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +23,9 @@ public class OngsService implements IOngsService {
 
     @Override
     public void saveNewRepo(OngReqDto req) {
+
+        validaSenha(req);
+
         EnderecoEntity endereco = enderecoRepository.findByRuaLike(req.nome_rua())
                 .orElseThrow(() -> new EnderecoNotFound(MESSAGE_ERRO_ENDERECO));
 
@@ -42,4 +46,10 @@ public class OngsService implements IOngsService {
     public OngsEntity findById(Long id) {
         return ongRepository.findById(id).orElseThrow();
     }
+
+    public void validaSenha(OngReqDto req){
+        if (!req.senha().equals(req.confirmacao_senha()))
+            throw new PassWordNotMatch("As senhas precisam ser as mesmas.");
+    }
+
 }

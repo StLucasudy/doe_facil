@@ -16,6 +16,8 @@ public record OngReqDto(
         @NotBlank
         String nome_rua,
         @NotBlank
-        String senha
+        String senha,
+        @NotBlank
+        String confirmacao_senha
 ){
 }
