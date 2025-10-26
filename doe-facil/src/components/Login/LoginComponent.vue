@@ -33,65 +33,67 @@
 
         <div v-else-if="cadastro" class="flex flex-col gap-5">
           <FloatLabel variant="on">
-            <InputText />
+            <InputText v-model="nomeOng" />
             <label>Nome da ONG</label>
           </FloatLabel>
 
           <FloatLabel variant="on">
-            <InputText />
+            <InputText v-model="objetivoOng" />
             <label>Objetivo da ONG</label>
           </FloatLabel>
 
           <FloatLabel variant="on">
-            <InputMask mask="99.999.999/9999-99" />
+            <InputMask v-model="cnpjOng" mask="99.999.999/9999-99" />
             <label>CPNJ</label>
           </FloatLabel>
 
           <FloatLabel variant="on">
-            <InputText />
+            <InputText v-model="ruaOng"/>
             <label>CEP</label>
           </FloatLabel>
 
 
-
           <FloatLabel variant="on">
-            <Password toggleMask name="senha" class="w-full" :feedback="false" />
+            <Password v-model="senhaOng" toggleMask name="senha" class="w-full" :feedback="false" />
             <label>Senha</label>
           </FloatLabel>
 
           <FloatLabel variant="on">
-            <Password toggleMask :feedback="false" class="w-full" />
+            <Password v-model="confirSenhaOng" toggleMask :feedback="false" class="w-full" />
             <label>Confirme sua senha</label>
           </FloatLabel>
 
           <div class="flex gap-10">
             <Button label="VOLTAR" class="!rounded-3xl" icon="pi pi-chevron-left" @click="cadastro = false" />
-            <Button label="PRÓXIMO" class="!bg-[var(--p-primary-950)] !rounded-3xl" icon="pi pi-chevron-right" @click="proximaEtapa = true, cadastro = false" />
+            <Button label="PRÓXIMO" class="!bg-[var(--p-primary-950)] !rounded-3xl" icon="pi pi-chevron-right"
+              @click="proximaEtapa = true, cadastro = false" />
           </div>
-        
+
         </div>
 
         <div v-else-if="proximaEtapa" class="flex flex-col gap-5 w-[75%]">
           <FloatLabel variant="on">
-            <InputText />
+            <InputText v-model="emailOng" />
             <label>E-mail</label>
           </FloatLabel>
           <FloatLabel variant="on">
-            <InputText />
+            <InputText v-model="telefoneOng" />
             <label>Telefone</label>
           </FloatLabel>
           <FloatLabel variant="on">
-            <InputText />
+            <InputText v-model="nomeResponsavel"/>
             <label>Nome do responsável</label>
           </FloatLabel>
-          <FloatLabel variant="on">
-            <InputMask mask="999.999.999-99" />
-            <label>CPF</label>
+          <FloatLabel variant=" on">
+              <InputMask v-model="cpf" mask="999.999.999-99" />
+              <label>CPF</label>
           </FloatLabel>
 
           <div class="flex gap-10">
-            <Button label="VOLTAR" class="!rounded-3xl" icon="pi pi-chevron-left" @click="proximaEtapa = false, cadastro = true" />
-            <Button label="CADASTRAR" class="!bg-[var(--p-primary-950)] !rounded-3xl" icon="pi pi-plus" @click="cadastrar" />
+            <Button label="VOLTAR" class="!rounded-3xl" icon="pi pi-chevron-left"
+              @click="proximaEtapa = false, cadastro = true" />
+            <Button label="CADASTRAR" class="!bg-[var(--p-primary-950)] !rounded-3xl" icon="pi pi-plus"
+              @click="cadastrar" />
           </div>
 
         </div>
@@ -118,6 +120,8 @@ import { useToast } from "primevue/usetoast";
 import { FloatLabel, InputMask, InputText } from "primevue";
 import { tituloProjeto } from "@/utils";
 import { useRouter } from "vue-router";
+import axios from "axios";
+
 
 const toast = useToast();
 const router = useRouter();
@@ -130,50 +134,73 @@ const login = ref<boolean>(false)
 const cadastro = ref<boolean>(false)
 const proximaEtapa = ref<boolean>(false)
 
+const nomeOng: Ref<string> = ref("");
+const cnpjOng: Ref<string> = ref("");
+const telefoneOng: Ref<string> = ref("");
+const emailOng: Ref<string> = ref("");
+const objetivoOng: Ref<string> = ref("");
+const senhaOng: Ref<string> = ref("");
+const confirSenhaOng: Ref<string> = ref("");
+const ruaOng: Ref<string> = ref("");
+const nomeResponsavel: Ref<string> = ref("");
+const cpf: Ref<string> = ref("");
+
+
 const entrar = async () => {
-  // if (
-  //   username.value.trim().length === 0 ||
-  //   password.value.trim().length === 0
-  // ) {
-  //   toast.add({
-  //     severity: "warn",
-  //     summary: "Existem campos vazios!",
-  //     detail: "Preencha corretamente todos os campos",
-  //     life: 3000
-  //   });
-  //   return;
-  // }
 
-  // loading.value = true;
+  const cnpjRMask = username.value.replace(/[^\d]/g, "")
 
-  // try {
-  //   loading.value = true;
+  axios.post('http://localhost:8082/login', {
+    cnpj: cnpjRMask,
+    senha: password.value
+  }).then(function (response) {
 
-  //   const userData = {
-  //     cpf: username.value,
-  //     password: password.value,
-  //   };
-
-  //   await api.post("/login", userData);
-  // } catch (error: any) {
-  //   console.log(error.response.data.message);
-
-  // } finally {
-  //   loading.value = false;
-  // }
-
-  login.value = false;
-  router.push("/home");
+    if (response.status === 200) {
+      login.value = true;
+      router.push("/home");
+    }
+  }).catch(function (error) {
+    console.log(error)
+    if (error.status === 401) {
+      toast.add({ severity: 'error', summary: 'Erro ao tentar executar o login', detail: 'Verifique se a senha e cnpj estão corretos.', life: 3000 });
+    }
+  });
 };
 
 const cadastrar = () => {
-  toast.add({
-    severity: "success",
-    summary: "ONG cadastrada com sucesso!",
-    detail: "Você já pode fazer o login na plataforma.",
-    life: 3000
-  });
-  
+
+  axios.post('http://localhost:8082/ongs', {
+
+    nome: nomeOng.value,
+    area_autacao: objetivoOng.value,
+    cnpj: cnpjOng.value.replace(/[^\d]/g, ""),
+    cep: ruaOng.value.replace(/[^\d]/g, ""),
+    senha: senhaOng.value,
+    confirmacao_senha: confirSenhaOng.value,
+    email: emailOng.value,
+    telefone: telefoneOng.value.replace(/[^\d]/g, ""),
+    responsavel: nomeResponsavel.value,
+    cpf: cpf.value.replace(/[^\d]/g, "")
+
+  }).then(function (response) {
+    toast.add({
+      severity: "success",
+      summary: "ONG cadastrada com sucesso!",
+      detail: "Você já pode fazer o login na plataforma.",
+      life: 3000
+    });
+    router.push("/home");
+  }).catch(function (error) {
+    toast.add({
+      severity: "error",
+      summary: "Erro ao tentar cadastrar ong.",
+      detail: "Verifique se os dados inseridos estão corretos.",
+      life: 3000
+    });
+  })
+
+
+
   setTimeout(() => {
     login.value = false
     cadastro.value = false

@@ -1,13 +1,17 @@
 package br.com.doefacil.srv.ongs.service;
 
+import br.com.doefacil.srv.ongs.controller.dto.req.LoginDtoReq;
 import br.com.doefacil.srv.ongs.controller.dto.req.OngReqDto;
-import br.com.doefacil.srv.ongs.repository.EnderecoNotFound;
 import br.com.doefacil.srv.ongs.repository.EnderecoRepository;
 import br.com.doefacil.srv.ongs.repository.OngRepository;
 import br.com.doefacil.srv.ongs.repository.entity.EnderecoEntity;
 import br.com.doefacil.srv.ongs.repository.entity.OngsEntity;
+import br.com.doefacil.srv.ongs.repository.exception.EnderecoNotFound;
+import br.com.doefacil.srv.ongs.repository.exception.UserNotFoundException;
 import br.com.doefacil.srv.ongs.service.exception.PassWordNotMatch;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class OngsService implements IOngsService {
@@ -26,7 +30,7 @@ public class OngsService implements IOngsService {
 
         validaSenha(req);
 
-        EnderecoEntity endereco = enderecoRepository.findByRuaLike(req.nome_rua())
+        EnderecoEntity endereco = enderecoRepository.findByCep(req.cep())
                 .orElseThrow(() -> new EnderecoNotFound(MESSAGE_ERRO_ENDERECO));
 
         ongRepository.save(
@@ -37,7 +41,9 @@ public class OngsService implements IOngsService {
                         req.telefone(),
                         req.area_autacao(),
                         req.senha(),
-                        endereco
+                        endereco,
+                        req.responsavel(),
+                        req.cpf()
                 )
         );
     }
@@ -47,9 +53,19 @@ public class OngsService implements IOngsService {
         return ongRepository.findById(id).orElseThrow();
     }
 
-    public void validaSenha(OngReqDto req){
+
+    public Boolean login(LoginDtoReq login) {
+
+        Optional<OngsEntity> ong = ongRepository.findByCnpjAndSenha(login.cnpj(), login.senha());
+
+        if (ong.isEmpty())
+            throw new UserNotFoundException("Usuário não encontrado, verifique email e senha.");
+
+        return Boolean.TRUE;
+    }
+
+    private void validaSenha(OngReqDto req) {
         if (!req.senha().equals(req.confirmacao_senha()))
             throw new PassWordNotMatch("As senhas precisam ser as mesmas.");
     }
-
 }

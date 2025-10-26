@@ -11,4 +11,6 @@ public interface EnderecoRepository extends JpaRepository<EnderecoEntity, Long> 
 
     Optional<EnderecoEntity> findByRuaLike(String rua);
 
+    Optional<EnderecoEntity> findByCep(String cep);
+
 }

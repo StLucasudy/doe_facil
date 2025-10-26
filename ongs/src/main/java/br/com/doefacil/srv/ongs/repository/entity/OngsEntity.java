@@ -10,23 +10,28 @@ public class OngsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "")
+    @Column
     private String nome;
-    @Column(name = "")
-    private String cnpj;
-    @Column(name = "")
-    private String email;
-    @Column(name = "")
-    private String telefone;
     @Column(name = "area_atuacao")
     private String area_atuacao;
-    @Column(name = "senha")
-    private String senha;
+    @Column
+    private String cnpj;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
     private EnderecoEntity endereco;
+    @Column(name = "senha")
+    private String senha;
+    @Column
+    private String email;
+    @Column
+    private String telefone;
+    @Column(name="responsavel")
+    private String reponsavel;
+    @Column
+    private String cpf;
 
-    public OngsEntity(String nome, String cnpj, String email, String telefone, String area_atuacao, String senha ,EnderecoEntity endereco) {
+    public OngsEntity(String nome, String cnpj, String email, String telefone, String area_atuacao, String senha,
+                      EnderecoEntity endereco, String responsavel, String cpf) {
         this.nome = nome;
         this.cnpj = cnpj;
         this.email = email;
@@ -34,6 +39,8 @@ public class OngsEntity {
         this.area_atuacao = area_atuacao;
         this.senha = senha;
         this.endereco = endereco;
+        this.reponsavel = responsavel;
+        this.cpf = cpf;
     }
 
     @Deprecated
@@ -64,39 +71,15 @@ public class OngsEntity {
         return area_atuacao;
     }
 
-    public String getSenha() {
-        return senha;
-    }
-
     public EnderecoEntity getEndereco() {
         return endereco;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setCpf(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public void setAreaAtuacao(String areaAtuacao) {
-        this.area_atuacao = areaAtuacao;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public void setEndereco(EnderecoEntity endereco) {
-        this.endereco = endereco;
+    public String getReponsavel() {
+        return reponsavel;
     }
 }

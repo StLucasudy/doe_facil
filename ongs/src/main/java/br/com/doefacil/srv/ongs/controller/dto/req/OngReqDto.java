@@ -6,18 +6,22 @@ public record OngReqDto(
         @NotBlank
         String nome,
         @NotBlank
-        String cnpj,
-        @NotBlank
-        String telefone,
-        @NotBlank
-        String email,
-        @NotBlank
         String area_autacao,
         @NotBlank
-        String nome_rua,
+        String cnpj,
+        @NotBlank
+        String cep,
         @NotBlank
         String senha,
         @NotBlank
-        String confirmacao_senha
+        String confirmacao_senha,
+        @NotBlank
+        String email,
+        @NotBlank
+        String telefone,
+        @NotBlank
+        String responsavel,
+        @NotBlank
+        String cpf
 ){
 }
