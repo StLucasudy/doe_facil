@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/doacao")
 public class DoacaoController {
@@ -29,13 +31,33 @@ public class DoacaoController {
     ResponseEntity<DoacaoDtoResp> findDoacao(@PathVariable("id") Long id) {
         DoacaoEntity doacao = service.findDoacao(id);
         return ResponseEntity.ok(new DoacaoDtoResp(
+                doacao.getId(),
                 doacao.getTipo(),
                 doacao.getDescricao(),
                 doacao.getValor(),
                 doacao.getData_doacao().toString(),
                 doacao.getDoador(),
-                doacao.getColaborador().getId().toString(),
+                doacao.getColaborador().getNome(),
                 doacao.getOng().getId().toString()
         ));
+    }
+
+    @GetMapping("/byOng/{id}")
+    ResponseEntity<ArrayList<DoacaoDtoResp>> findDoacoesByOng(@PathVariable("id") Long idOng){
+        ArrayList<DoacaoEntity> doacao = service.findDoacoes(idOng);
+        ArrayList<DoacaoDtoResp> res = new ArrayList();
+        doacao.stream().map(doacaoEntity -> {
+            return res.add(new DoacaoDtoResp(
+                    doacaoEntity.getId(),
+                    doacaoEntity.getTipo(),
+                    doacaoEntity.getDescricao(),
+                    doacaoEntity.getValor(),
+                    doacaoEntity.getData_doacao().toString(),
+                    doacaoEntity.getDoador(),
+                    doacaoEntity.getColaborador().getNome(),
+                    doacaoEntity.getOng().getId().toString()));
+        });
+
+        return ResponseEntity.ok(res);
     }
 }

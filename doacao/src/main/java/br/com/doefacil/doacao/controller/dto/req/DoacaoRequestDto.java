@@ -12,7 +12,7 @@ public record DoacaoRequestDto(
         String data_doacao,
         String doador,
         @NotBlank
-        String colaborador_id,
+        String colaborador_nome,
         @NotBlank
         String ong_id
 ) {

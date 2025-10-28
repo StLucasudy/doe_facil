@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 @Service
 public class DoeacaoService implements IDoeacaoService {
@@ -26,7 +27,7 @@ public class DoeacaoService implements IDoeacaoService {
     @Override
     public void createDoacao(DoacaoRequestDto req) {
 
-        Long idCola = Long.parseLong(req.colaborador_id());
+
         Long idOng = Long.parseLong(req.ong_id());
         LocalDate date = LocalDate.parse(req.data_doacao(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
@@ -37,7 +38,7 @@ public class DoeacaoService implements IDoeacaoService {
                         req.valor(),
                         date,
                         req.doador(),
-                        colaboradorRepository.findById(idCola).orElseThrow(),
+                        colaboradorRepository.findByNome(req.colaborador_nome()).orElseThrow(),
                         ongRepository.findById(idOng).orElseThrow()
                 )
         );
@@ -46,5 +47,10 @@ public class DoeacaoService implements IDoeacaoService {
     @Override
     public DoacaoEntity findDoacao(Long id) {
         return doacaoRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public ArrayList<DoacaoEntity> findDoacoes(Long idOng) {
+        return doacaoRepository.findByOng(idOng);
     }
 }

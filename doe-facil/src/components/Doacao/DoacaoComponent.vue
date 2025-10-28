@@ -10,7 +10,8 @@
                 </div>
 
                 <div class="px-10">
-                    <Button @click="router.push('/home')" icon="pi pi-arrow-left" class="!bg-[var(--p-primary-950)] !rounded-3xl mt-5" />
+                    <Button @click="router.push('/home')" icon="pi pi-arrow-left"
+                        class="!bg-[var(--p-primary-950)] !rounded-3xl mt-5" />
                     <h1 class="text-center my-6 text-2xl font-semibold py-5">Histórico de Doações</h1>
 
                     <ul v-for="doacao in doacoes" :key="doacao.id"
@@ -58,34 +59,34 @@
 
                 <div class="mt-10 text-center flex flex-col gap-5 mx-20">
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="doacaoBem" />
                         <label>Opções de Bem</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="descricao" />
                         <label>Descrição</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
-                        <InputNumber mask="integer" />
+                        <InputNumber v-model="quantidade" mask="integer" />
                         <label>Quantidade</label>
                     </FloatLabel>
 
                     <div class="flex items-center gap-3">
-                        <Checkbox />
+                        <Checkbox v-model="eAnonimo" />
                         <label>Anônimo</label>
                     </div>
 
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="nomeDoador" />
                         <label>Nome do Doador</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="nomeColaborador" />
                         <label>Nome do Colaborador</label>
                     </FloatLabel>
 
-                    <Button label="Registrar Doação" class="!bg-[var(--p-primary-950)] !rounded-3xl mt-5"
-                        icon="pi pi-check" />
+                    <Button @click="executarDoacaoBem" label="Registrar Doação"
+                        class="!bg-[var(--p-primary-950)] !rounded-3xl mt-5" icon="pi pi-check" />
                 </div>
             </div>
 
@@ -101,30 +102,30 @@
 
                 <div class="mt-10 text-center flex flex-col gap-5 mx-20">
                     <FloatLabel variant="on">
-                        <InputNumber mask="currency" />
+                        <InputNumber v-model="valor" mask="currency" />
                         <label>Valor</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="maneiraDoa" />
                         <label>Maneira de Doação</label>
                     </FloatLabel>
 
                     <div class="flex items-center gap-3">
-                        <Checkbox />
+                        <Checkbox v-model="eAnonimo" />
                         <label>Anônimo</label>
                     </div>
 
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="nomeDoador" />
                         <label>Nome do Doador</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
-                        <InputText />
+                        <InputText v-model="nomeColaborador" />
                         <label>Nome do Colaborador</label>
                     </FloatLabel>
 
                     <Button label="Registrar Doação" class="!bg-[var(--p-primary-950)] !rounded-3xl mt-5"
-                        icon="pi pi-check" />
+                        icon="pi pi-check" @click="executarDoacaoMonetaria" />
                 </div>
             </div>
 
@@ -134,9 +135,13 @@
 
 <script setup lang="ts">
 import { Button, Checkbox, FloatLabel, InputNumber, InputText } from 'primevue';
-import { ref } from 'vue';
+import { ref, type Ref } from "vue";
 import { useRouter } from 'vue-router';
+import { useToast } from "primevue/usetoast";
+import axios from "axios";
 
+
+const toast = useToast();
 const router = useRouter();
 
 // controle de telas
@@ -175,6 +180,115 @@ const doacoes = [
         status: "Confirmada"
     },
 ];
+
+const endpoint = 'http://localhost:8083/doacao';
+const doacaoBem: Ref<string> = ref("");
+const descricao: Ref<string> = ref("Doação monetaria executada.");
+const quantidade: Ref<number> = ref(0);
+const valor: Ref<number> = ref(0);
+const eAnonimo: Ref<boolean> = ref(false);
+const nomeDoador: Ref<string> = ref("");
+const nomeColaborador: Ref<string> = ref("");
+const maneiraDoa: Ref<string> = ref("");
+const data = new Date().toLocaleDateString('pt-BR')
+
+const executarDoacaoMonetaria = () => {
+
+    axios.post(endpoint, {
+
+        "tipo": "FINANCEIRA",
+        "descricao": descricao.value,
+        "valor": valor.value,
+        "data_doacao": data,
+        "doador": nomeDoador.value,
+        "colaborador_nome": nomeColaborador.value,
+        "ong_id": "1"
+
+    }).then(function (response) {
+
+        toast.add({
+            severity: "success",
+            summary: "Doação cadastrada com sucesso!",
+            detail: "Você já pode encontrar a doação na plataforma.",
+            life: 3000
+        });
+
+        router.push("/home");
+    }).catch(function (error) {
+
+        toast.add({
+            severity: "error",
+            summary: "Erro ao tentar cadastrar ong.",
+            detail: "Verifique se os dados inseridos estão corretos.",
+            life: 3000
+        });
+    })
+}
+
+const executarDoacaoBem = () => {
+
+    axios.post(endpoint, {
+
+        "tipo": "PRODUTO",
+        "descricao": doacaoBem.value + " - " + descricao.value + " - " + quantidade.value,
+        "valor": null,
+        "data_doacao": data,
+        "doador": nomeDoador.value,
+        "colaborador_nome": nomeColaborador.value,
+        "ong_id": "1"
+
+    }).then(function (response) {
+
+        console.log(response)
+
+        toast.add({
+            severity: "success",
+            summary: "Doação cadastrada com sucesso!",
+            detail: "Você já pode encontrar a doação na plataforma.",
+            life: 3000
+        });
+        router.push("/home");
+    }).catch(function (error) {
+
+        console.log(error)
+
+        toast.add({
+            severity: "error",
+            summary: "Erro ao tentar cadastrar ong.",
+            detail: "Verifique se os dados inseridos estão corretos.",
+            life: 3000
+        });
+    })
+}
+
+const executarBuscaDoacoes = () => {
+
+    axios.post(endpoint, {})
+        .then(function (response) {
+
+            console.log(response)
+
+            toast.add({
+                severity: "success",
+                summary: "Doação cadastrada com sucesso!",
+                detail: "Você já pode encontrar a doação na plataforma.",
+                life: 3000
+            });
+            router.push("/home");
+        }).catch(function (error) {
+
+            console.log(error)
+
+            toast.add({
+                severity: "error",
+                summary: "Erro ao tentar cadastrar ong.",
+                detail: "Verifique se os dados inseridos estão corretos.",
+                life: 3000
+            });
+        })
+
+}
+
 </script>
 
 <style scoped lang="scss"></style>
