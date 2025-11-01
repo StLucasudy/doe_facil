@@ -155,17 +155,6 @@ const maneiraDoa: Ref<string> = ref("");
 const data = new Date().toLocaleDateString('pt-BR')
 const idOng = 1;
 
-interface Doacao {
-    colaborador: string,
-    data_doacao: string, 
-    descricao: string,
-    doador: string,
-    id: number,
-    ong_id: string,
-    tipo: string,
-    valor: number
-}
-
 // controle de telas
 const telaAtual = ref<'historico' | 'opcoes' | 'doacaoBem' | 'doacaoMonetaria'>('historico');
 
