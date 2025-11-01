@@ -70,35 +70,4 @@ public class DoacaoEntity {
         return ong;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public void setValor(Float valor) {
-        this.valor = valor;
-    }
-
-    public void setData_doacao(LocalDate data_doacao) {
-        this.data_doacao = data_doacao;
-    }
-
-    public void setDoador(String doador) {
-        this.doador = doador;
-    }
-
-    public void setColaborador(ColaboradorEntity colaborador) {
-        this.colaborador = colaborador;
-    }
-
-    public void setOng(OngsEntity ong) {
-        this.ong = ong;
-    }
 }

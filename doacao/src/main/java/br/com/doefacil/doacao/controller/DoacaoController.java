@@ -43,11 +43,12 @@ public class DoacaoController {
     }
 
     @GetMapping("/byOng/{id}")
-    ResponseEntity<ArrayList<DoacaoDtoResp>> findDoacoesByOng(@PathVariable("id") Long idOng){
+    ResponseEntity<ArrayList<DoacaoDtoResp>> findDoacoesByOng(@PathVariable("id") Long idOng) {
         ArrayList<DoacaoEntity> doacao = service.findDoacoes(idOng);
         ArrayList<DoacaoDtoResp> res = new ArrayList();
-        doacao.stream().map(doacaoEntity -> {
-            return res.add(new DoacaoDtoResp(
+
+        doacao.forEach(doacaoEntity -> {
+            res.add(new DoacaoDtoResp(
                     doacaoEntity.getId(),
                     doacaoEntity.getTipo(),
                     doacaoEntity.getDescricao(),

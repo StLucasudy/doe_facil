@@ -51,6 +51,6 @@ public class DoeacaoService implements IDoeacaoService {
 
     @Override
     public ArrayList<DoacaoEntity> findDoacoes(Long idOng) {
-        return doacaoRepository.findByOng(idOng);
+        return doacaoRepository.seachDoacoesByOngId(idOng);
     }
 }
