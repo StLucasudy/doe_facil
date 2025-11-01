@@ -13,13 +13,13 @@
                     <Button @click="router.push('/home')" icon="pi pi-arrow-left"
                         class="!bg-[var(--p-primary-950)] !rounded-3xl mt-5" />
                     <h1 class="text-center my-6 text-2xl font-semibold py-5">Histórico de Doações</h1>
-
+                        
                     <ul v-for="doacao in doacoes" :key="doacao.id"
                         class="border-2 border-black m-6 p-4 rounded-xl grid grid-cols-2 gap-4 [&>div]:flex [&>div]:flex-col [&>div]:justify-center">
                         <!-- Coluna 1: Tipo + mensagem -->
                         <div>
                             <li>{{ doacao.tipo }}</li>
-                            <li><small>{{ doacao.mensagem }}</small></li>
+                            <li><small>{{ doacao.descricao }}</small></li>
                         </div>
 
                         <!-- Coluna 2: Código + doador -->
@@ -140,46 +140,8 @@ import { useRouter } from 'vue-router';
 import { useToast } from "primevue/usetoast";
 import axios from "axios";
 
-
 const toast = useToast();
 const router = useRouter();
-
-// controle de telas
-const telaAtual = ref<'historico' | 'opcoes' | 'doacaoBem' | 'doacaoMonetaria'>('historico');
-
-// dados fictícios
-const doacoes = [
-    {
-        id: 1234,
-        tipo: "Doação monetária",
-        moeda: "BRL",
-        doador: "Ana Souza",
-        data: "2025-10-15T14:32:00Z",
-        mensagem: "Feliz em contribuir com a causa!",
-        metodo_pagamento: "Cartão de Crédito",
-        status: "Confirmada"
-    },
-    {
-        id: 4567,
-        tipo: "Doação de Bem",
-        moeda: "BRL",
-        doador: "José",
-        data: "2025-10-15T14:32:00Z",
-        mensagem: "Doando com gratidão!",
-        metodo_pagamento: "Cartão de Crédito",
-        status: "Confirmada"
-    },
-    {
-        id: 8910,
-        tipo: "Doação monetária",
-        moeda: "BRL",
-        doador: "Souza",
-        data: "2025-10-15T14:32:00Z",
-        mensagem: "Sempre ajudando!",
-        metodo_pagamento: "Cartão de Crédito",
-        status: "Confirmada"
-    },
-];
 
 const endpoint = 'http://localhost:8083/doacao';
 const doacaoBem: Ref<string> = ref("");
@@ -191,6 +153,25 @@ const nomeDoador: Ref<string> = ref("");
 const nomeColaborador: Ref<string> = ref("");
 const maneiraDoa: Ref<string> = ref("");
 const data = new Date().toLocaleDateString('pt-BR')
+const idOng = 1;
+
+interface Doacao {
+    colaborador: string,
+    data_doacao: string, 
+    descricao: string,
+    doador: string,
+    id: number,
+    ong_id: string,
+    tipo: string,
+    valor: number
+}
+
+// controle de telas
+const telaAtual = ref<'historico' | 'opcoes' | 'doacaoBem' | 'doacaoMonetaria'>('historico');
+
+// dados fictícios
+const doacoes = ref([]);
+executarBuscaDoacoes();
 
 const executarDoacaoMonetaria = () => {
 
@@ -261,32 +242,15 @@ const executarDoacaoBem = () => {
     })
 }
 
-const executarBuscaDoacoes = () => {
-
-    axios.post(endpoint, {})
-        .then(function (response) {
-
-            console.log(response)
-
-            toast.add({
-                severity: "success",
-                summary: "Doação cadastrada com sucesso!",
-                detail: "Você já pode encontrar a doação na plataforma.",
-                life: 3000
-            });
-            router.push("/home");
-        }).catch(function (error) {
-
-            console.log(error)
-
-            toast.add({
-                severity: "error",
-                summary: "Erro ao tentar cadastrar ong.",
-                detail: "Verifique se os dados inseridos estão corretos.",
-                life: 3000
-            });
-        })
-
+function executarBuscaDoacoes(){
+    
+    axios.get(endpoint + "/byOng/" + idOng)
+    .then(function (response){
+        doacoes.value = response.data;
+    })
+    .catch(function (error){
+        console.log(error)
+    })
 }
 
 </script>
