@@ -153,7 +153,7 @@ const nomeDoador: Ref<string> = ref("");
 const nomeColaborador: Ref<string> = ref("");
 const maneiraDoa: Ref<string> = ref("");
 const data = new Date().toLocaleDateString('pt-BR')
-const idOng = 1;
+const idOng = localStorage.getItem('idOng');
 
 // controle de telas
 const telaAtual = ref<'historico' | 'opcoes' | 'doacaoBem' | 'doacaoMonetaria'>('historico');

@@ -2,6 +2,7 @@ package br.com.doefacil.srv.ongs.service;
 
 import br.com.doefacil.srv.ongs.controller.dto.req.LoginDtoReq;
 import br.com.doefacil.srv.ongs.controller.dto.req.OngReqDto;
+import br.com.doefacil.srv.ongs.controller.dto.resp.LoginRespDto;
 import br.com.doefacil.srv.ongs.repository.EnderecoRepository;
 import br.com.doefacil.srv.ongs.repository.OngRepository;
 import br.com.doefacil.srv.ongs.repository.entity.EnderecoEntity;
@@ -54,14 +55,14 @@ public class OngsService implements IOngsService {
     }
 
 
-    public Boolean login(LoginDtoReq login) {
+    public LoginRespDto login(LoginDtoReq login) {
 
         Optional<OngsEntity> ong = ongRepository.findByCnpjAndSenha(login.cnpj(), login.senha());
 
         if (ong.isEmpty())
             throw new UserNotFoundException("Usuário não encontrado, verifique email e senha.");
 
-        return Boolean.TRUE;
+        return new LoginRespDto(ong.get().getId().toString(),Boolean.TRUE);
     }
 
     private void validaSenha(OngReqDto req) {

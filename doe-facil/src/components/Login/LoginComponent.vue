@@ -48,7 +48,7 @@
           </FloatLabel>
 
           <FloatLabel variant="on">
-            <InputText v-model="ruaOng"/>
+            <InputText v-model="ruaOng" />
             <label>CEP</label>
           </FloatLabel>
 
@@ -81,12 +81,12 @@
             <label>Telefone</label>
           </FloatLabel>
           <FloatLabel variant="on">
-            <InputText v-model="nomeResponsavel"/>
+            <InputText v-model="nomeResponsavel" />
             <label>Nome do responsável</label>
           </FloatLabel>
           <FloatLabel variant=" on">
-              <InputMask v-model="cpf" mask="999.999.999-99" />
-              <label>CPF</label>
+            <InputMask v-model="cpf" mask="999.999.999-99" />
+            <label>CPF</label>
           </FloatLabel>
 
           <div class="flex gap-10">
@@ -114,14 +114,12 @@
 import Password from "primevue/password";
 import Button from "primevue/button";
 import { onMounted, ref, type Ref } from "vue";
-import { api } from "@/plugins/axios";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
 import { FloatLabel, InputMask, InputText } from "primevue";
 import { tituloProjeto } from "@/utils";
 import { useRouter } from "vue-router";
 import axios from "axios";
-
 
 const toast = useToast();
 const router = useRouter();
@@ -157,6 +155,7 @@ const entrar = async () => {
 
     if (response.status === 200) {
       login.value = true;
+      localStorage.setItem('idOng', response.data.idOng)
       router.push("/home");
     }
   }).catch(function (error) {

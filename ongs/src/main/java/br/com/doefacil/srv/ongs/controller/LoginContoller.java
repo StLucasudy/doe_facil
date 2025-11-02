@@ -1,6 +1,7 @@
 package br.com.doefacil.srv.ongs.controller;
 
 import br.com.doefacil.srv.ongs.controller.dto.req.LoginDtoReq;
+import br.com.doefacil.srv.ongs.controller.dto.resp.LoginRespDto;
 import br.com.doefacil.srv.ongs.service.OngsService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,8 @@ public class LoginContoller {
 
     @ResponseStatus(HttpStatus.OK)
     @PostMapping
-    public void executarLogin(@RequestBody @Valid LoginDtoReq login){
-        service.login(login);
+    public LoginRespDto executarLogin(@RequestBody @Valid LoginDtoReq login){
+        return service.login(login);
     }
 
 }
