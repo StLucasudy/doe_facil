@@ -91,7 +91,7 @@ import axios from "axios";
 
 const router = useRouter();
 
-const idColaborador = 1
+const idOng = localStorage.getItem('idOng');
 const endpoint = 'http://localhost:8081/Colaboradores';
 executarBuscaColaborador();
 // controle de telas
@@ -165,7 +165,7 @@ function adicionarColaborador() {
 
 function executarBuscaColaborador(){
     
-    axios.get(endpoint + "/byOng/" + idColaborador)
+    axios.get(endpoint + "/byOng/" + idOng)
     .then(function (response){
         console.log(response.data)
         colaboradores.value = response.data
