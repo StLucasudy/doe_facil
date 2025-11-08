@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/Colaboradores")
 public class ColaboradorController {
@@ -38,5 +41,25 @@ public class ColaboradorController {
                         entity.getEndereco().getId(),
                         entity.getOng().getId()
                 ), HttpStatus.OK);
+    }
+
+    @GetMapping("/byOng/{id}")
+    ResponseEntity<ArrayList<ColaboradorRespDto>> findColaboradorByOng(@PathVariable("id") Long id ){
+        ArrayList<ColaboradorEntity> entity =  iColaboradorService.findByOngId(id);
+        ArrayList<ColaboradorRespDto> resp = new ArrayList();
+
+        entity.forEach(colaboradorEntity -> {
+            resp.add(new ColaboradorRespDto(
+                    colaboradorEntity.getNome(),
+                    colaboradorEntity.getCpf(),
+                    colaboradorEntity.getEmail(),
+                    colaboradorEntity.getTelefone(),
+                    colaboradorEntity.getCargo(),
+                    colaboradorEntity.getEndereco().getId(),
+                    colaboradorEntity.getOng().getId()
+            ));
+        });
+
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 }

@@ -55,8 +55,8 @@
                         <label>E-mail</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
-                        <InputText v-model="novoColaborador.tipoContratacao" />
-                        <label>Tipo de contratação</label>
+                        <InputText v-model="novoColaborador.Documento" />
+                        <label>Documento</label>
                     </FloatLabel>
                     <FloatLabel variant="on">
                         <InputText v-model="novoColaborador.cargo" />
@@ -74,7 +74,7 @@
                     <p><strong>Nome:</strong> {{ colaboradorSelecionado.nome }}</p>
                     <p><strong>Telefone:</strong> {{ colaboradorSelecionado.telefone }}</p>
                     <p><strong>E-mail:</strong> {{ colaboradorSelecionado.email }}</p>
-                    <p><strong>Tipo de Contratação:</strong> {{ colaboradorSelecionado.tipoContratacao }}</p>
+                    <p><strong>Documento:</strong> {{ colaboradorSelecionado.cpf }}</p>
                     <p><strong>Cargo:</strong> {{ colaboradorSelecionado.cargo }}</p>
                 </div>
             </Dialog>
@@ -87,9 +87,13 @@
 import { Button, FloatLabel, InputText, Dialog } from 'primevue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from "axios";
 
 const router = useRouter();
 
+const idColaborador = 1
+const endpoint = 'http://localhost:8081/Colaboradores';
+executarBuscaColaborador();
 // controle de telas
 const telaAtual = ref<'historico' | 'opcoes'>('historico');
 
@@ -104,7 +108,7 @@ const colaboradores = ref([
         nome: "Ana Souza",
         telefone: "(11) 91234-5678",
         email: "ana.souza@example.com",
-        tipoContratacao: "CLT",
+        Documento: "CLT",
         cargo: "Gerente de Doações"
     },
     {
@@ -112,7 +116,7 @@ const colaboradores = ref([
         nome: "Maria Oliveira",
         telefone: "(11) 99876-5432",
         email: "maria.oliveira@example.com",
-        tipoContratacao: "PJ",
+        Documento: "PJ",
         cargo: "Coordenadora de Projetos"
     },
     {
@@ -120,7 +124,7 @@ const colaboradores = ref([
         nome: "José Silva",
         telefone: "(21) 92345-6789",
         email: "jose.silva@example.com",
-        tipoContratacao: "Estágio",
+        Documento: "Estágio",
         cargo: "Assistente Administrativo"
     }
 ]);
@@ -130,7 +134,7 @@ const novoColaborador = ref({
     nome: '',
     telefone: '',
     email: '',
-    tipoContratacao: '',
+    Documento: '',
     cargo: ''
 });
 
@@ -152,11 +156,23 @@ function adicionarColaborador() {
         nome: '',
         telefone: '',
         email: '',
-        tipoContratacao: '',
+        Documento: '',
         cargo: ''
     };
 
     telaAtual.value = 'historico';
+}
+
+function executarBuscaColaborador(){
+    
+    axios.get(endpoint + "/byOng/" + idColaborador)
+    .then(function (response){
+        console.log(response.data)
+        colaboradores.value = response.data
+    })
+    .catch(function (error){
+        console.log(error)
+    })
 }
 </script>
 

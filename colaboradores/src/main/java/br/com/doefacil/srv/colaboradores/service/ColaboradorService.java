@@ -8,6 +8,8 @@ import br.com.doefacil.srv.colaboradores.service.iservice.IEnderecoService;
 import br.com.doefacil.srv.colaboradores.service.iservice.IOngService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class ColaboradorService implements IColaboradorService {
 
@@ -40,5 +42,10 @@ public class ColaboradorService implements IColaboradorService {
     @Override
     public ColaboradorEntity findById(Long id) {
         return repository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public ArrayList<ColaboradorEntity> findByOngId(Long id) {
+        return repository.findByIdOng(id);
     }
 }
