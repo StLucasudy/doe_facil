@@ -6,6 +6,5 @@ public record ColaboradorRespDto(
         String email,
         String telefone,
         String cargo,
-        Long idEndereco,
         Long idOng
 ){}

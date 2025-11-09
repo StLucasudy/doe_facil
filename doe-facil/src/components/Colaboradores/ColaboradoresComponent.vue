@@ -69,7 +69,8 @@
             </div>
 
             <!-- 🪟 DIALOG DE DETALHES -->
-            <Dialog v-model:visible="mostrarDialog" modal header="Detalhes do Colaborador" class="w-[90%] sm:w-[40rem]" dismissable-mask>
+            <Dialog v-model:visible="mostrarDialog" modal header="Detalhes do Colaborador" class="w-[90%] sm:w-[40rem]"
+                dismissable-mask>
                 <div v-if="colaboradorSelecionado" class="space-y-3 text-lg">
                     <p><strong>Nome:</strong> {{ colaboradorSelecionado.nome }}</p>
                     <p><strong>Telefone:</strong> {{ colaboradorSelecionado.telefone }}</p>
@@ -91,43 +92,18 @@ import axios from "axios";
 
 const router = useRouter();
 
-const idOng = localStorage.getItem('idOng');
-const endpoint = 'http://localhost:8081/Colaboradores';
-executarBuscaColaborador();
 // controle de telas
 const telaAtual = ref<'historico' | 'opcoes'>('historico');
 
 // controle do Dialog
+const idOng = localStorage.getItem('idOng');
+const endpoint = 'http://localhost:8081/Colaboradores';
+executarBuscaColaborador();
 const mostrarDialog = ref(false);
 const colaboradorSelecionado = ref<any>(null);
 
 // dados fictícios ajustados
-const colaboradores = ref([
-    {
-        id: 1234,
-        nome: "Ana Souza",
-        telefone: "(11) 91234-5678",
-        email: "ana.souza@example.com",
-        Documento: "CLT",
-        cargo: "Gerente de Doações"
-    },
-    {
-        id: 4567,
-        nome: "Maria Oliveira",
-        telefone: "(11) 99876-5432",
-        email: "maria.oliveira@example.com",
-        Documento: "PJ",
-        cargo: "Coordenadora de Projetos"
-    },
-    {
-        id: 8910,
-        nome: "José Silva",
-        telefone: "(21) 92345-6789",
-        email: "jose.silva@example.com",
-        Documento: "Estágio",
-        cargo: "Assistente Administrativo"
-    }
-]);
+const colaboradores = ref([]);
 
 // formulário de novo colaborador
 const novoColaborador = ref({
@@ -146,33 +122,53 @@ function abrirDetalhes(colaborador: any) {
 
 // adiciona colaborador novo
 function adicionarColaborador() {
-    colaboradores.value.push({
-        id: Date.now(),
-        ...novoColaborador.value
-    });
+    // colaboradores.value.push({
+    //     id: Date.now(),
+    //     ...novoColaborador.value
+    // });
 
-    // limpa formulário
-    novoColaborador.value = {
-        nome: '',
-        telefone: '',
-        email: '',
-        Documento: '',
-        cargo: ''
-    };
-
-    telaAtual.value = 'historico';
-}
-
-function executarBuscaColaborador(){
-    
-    axios.get(endpoint + "/byOng/" + idOng)
-    .then(function (response){
-        console.log(response.data)
-        colaboradores.value = response.data
-    })
-    .catch(function (error){
+    axios.post(endpoint, 
+        {
+            "nome": novoColaborador.value.nome,
+            "cpf": novoColaborador.value.Documento,
+            "email": novoColaborador.value.email,
+            "telefone": novoColaborador.value.telefone,
+            "cargo": novoColaborador.value.cargo,
+            "idEndereco": 1,
+            "idOng": idOng
+        }
+    )
+    .then(function (response) {
+            if(response.status == 201)
+                router.push("/colaboradores");
+        })
+    .catch(function (error) {
         console.log(error)
     })
+
+
+// limpa formulário
+novoColaborador.value = {
+    nome: '',
+    telefone: '',
+    email: '',
+    Documento: '',
+    cargo: ''
+};
+
+telaAtual.value = 'historico';
+}
+
+function executarBuscaColaborador() {
+
+    axios.get(endpoint + "/byOng/" + idOng)
+        .then(function (response) {
+            console.log(response.data)
+            colaboradores.value = response.data
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
 }
 </script>
 

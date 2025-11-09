@@ -33,7 +33,6 @@ public class ColaboradorService implements IColaboradorService {
                     colaborador.email(),
                     colaborador.telefone(),
                     colaborador.cargo(),
-                    enderecoService.findByID(colaborador.idEndereco().longValue()),
                     ongService.findById(colaborador.idOng().longValue())
                 )
         );

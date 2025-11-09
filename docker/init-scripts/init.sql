@@ -27,7 +27,6 @@ CREATE TABLE colaboradores (
     email VARCHAR(100),
     telefone VARCHAR(20),
     cargo VARCHAR(100),
-    endereco_id INT REFERENCES enderecos(id) ON DELETE SET NULL,
     ong_id INT NOT NULL REFERENCES ongs(id) ON DELETE CASCADE
 );
 

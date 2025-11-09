@@ -38,7 +38,6 @@ public class ColaboradorController {
                         entity.getEmail(),
                         entity.getTelefone(),
                         entity.getCargo(),
-                        entity.getEndereco().getId(),
                         entity.getOng().getId()
                 ), HttpStatus.OK);
     }
@@ -55,7 +54,6 @@ public class ColaboradorController {
                     colaboradorEntity.getEmail(),
                     colaboradorEntity.getTelefone(),
                     colaboradorEntity.getCargo(),
-                    colaboradorEntity.getEndereco().getId(),
                     colaboradorEntity.getOng().getId()
             ));
         });

@@ -20,8 +20,6 @@ public record ColaboradorReqDto(
         @NotBlank
         String cargo,
         @NotNull
-        Integer idEndereco,
-        @NotNull
         Integer idOng
 ) {
 }
