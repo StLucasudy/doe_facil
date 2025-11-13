@@ -61,7 +61,7 @@
                     <FloatLabel variant="on">
                         <InputText v-model="doacaoBem" />
                         <label>Opções de Bem</label>
-                    </FloatLabel>
+                    </FloatLabel>eu 
                     <FloatLabel variant="on">
                         <InputText v-model="descricao" />
                         <label>Descrição</label>
@@ -159,88 +159,84 @@ const idOng = localStorage.getItem('idOng');
 const telaAtual = ref<'historico' | 'opcoes' | 'doacaoBem' | 'doacaoMonetaria'>('historico');
 
 // dados fictícios
-const doacoes = ref([]);
+const doacoes = ref<any>([]);
 executarBuscaDoacoes();
 
-const executarDoacaoMonetaria = () => {
+const executarDoacaoMonetaria = async () => {
+  try {
+    const response = await axios.post(endpoint, {
+      tipo: "FINANCEIRA",
+      descricao: descricao.value,
+      valor: valor.value,
+      data_doacao: data,
+      doador: nomeDoador.value,
+      colaborador_nome: nomeColaborador.value,
+      ong_id: "1"
+    });
 
-    axios.post(endpoint, {
+    toast.add({
+      severity: "success",
+      summary: "Doação cadastrada com sucesso!",
+      detail: "Você já pode encontrar a doação na plataforma.",
+      life: 3000
+    });
 
-        "tipo": "FINANCEIRA",
-        "descricao": descricao.value,
-        "valor": valor.value,
-        "data_doacao": data,
-        "doador": nomeDoador.value,
-        "colaborador_nome": nomeColaborador.value,
-        "ong_id": "1"
+    router.push("/home");
+  } catch (error) {
+    toast.add({
+      severity: "error",
+      summary: "Erro ao tentar cadastrar doação.",
+      detail: "Verifique se os dados inseridos estão corretos.",
+      life: 3000
+    });
+    console.error(error);
+  }
+};
 
-    }).then(function (response) {
+const executarDoacaoBem = async () => {
+  try {
+    const response = await axios.post(endpoint, {
+      tipo: "PRODUTO",
+      descricao: `${doacaoBem.value} - ${descricao.value} - ${quantidade.value}`,
+      valor: null,
+      data_doacao: data,
+      doador: nomeDoador.value,
+      colaborador_nome: nomeColaborador.value,
+      ong_id: "1"
+    });
 
-        toast.add({
-            severity: "success",
-            summary: "Doação cadastrada com sucesso!",
-            detail: "Você já pode encontrar a doação na plataforma.",
-            life: 3000
-        });
+    console.log(response);
 
-        router.push("/home");
-    }).catch(function (error) {
+    toast.add({
+      severity: "success",
+      summary: "Doação cadastrada com sucesso!",
+      detail: "Você já pode encontrar a doação na plataforma.",
+      life: 3000
+    });
 
-        toast.add({
-            severity: "error",
-            summary: "Erro ao tentar cadastrar ong.",
-            detail: "Verifique se os dados inseridos estão corretos.",
-            life: 3000
-        });
-    })
+    router.push("/home");
+  } catch (error) {
+    console.error(error);
+
+    toast.add({
+      severity: "error",
+      summary: "Erro ao tentar cadastrar doação.",
+      detail: "Verifique se os dados inseridos estão corretos.",
+      life: 3000
+    });
+  }
+};
+
+async function executarBuscaDoacoes() {
+  try {
+    const response = await axios.get(`${endpoint}/byOng/${idOng}`);
+    doacoes.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-const executarDoacaoBem = () => {
 
-    axios.post(endpoint, {
-
-        "tipo": "PRODUTO",
-        "descricao": doacaoBem.value + " - " + descricao.value + " - " + quantidade.value,
-        "valor": null,
-        "data_doacao": data,
-        "doador": nomeDoador.value,
-        "colaborador_nome": nomeColaborador.value,
-        "ong_id": "1"
-
-    }).then(function (response) {
-
-        console.log(response)
-
-        toast.add({
-            severity: "success",
-            summary: "Doação cadastrada com sucesso!",
-            detail: "Você já pode encontrar a doação na plataforma.",
-            life: 3000
-        });
-        router.push("/home");
-    }).catch(function (error) {
-
-        console.log(error)
-
-        toast.add({
-            severity: "error",
-            summary: "Erro ao tentar cadastrar ong.",
-            detail: "Verifique se os dados inseridos estão corretos.",
-            life: 3000
-        });
-    })
-}
-
-function executarBuscaDoacoes(){
-    
-    axios.get(endpoint + "/byOng/" + idOng)
-    .then(function (response){
-        doacoes.value = response.data;
-    })
-    .catch(function (error){
-        console.log(error)
-    })
-}
 
 </script>
 

@@ -24,6 +24,11 @@
             <label for="user"> Senha </label>
           </FloatLabel>
 
+          <div>
+            Esqueceu a senha? <span @click="visibleEsqueceu = true"
+              class="text-[var(--p-primary-700)] underline cursor-pointer">Clique aqui</span>
+          </div>
+
           <div class="flex gap-10 w-[72.5%]">
             <Button @click="login = false" label="VOLTAR" class="w-1/2 !rounded-3xl" icon="pi pi-chevron-left"></Button>
             <Button @click="entrar" type="button" label="LOGIN" :loading="loading" icon="pi pi-sign-in"
@@ -40,6 +45,11 @@
           <FloatLabel variant="on">
             <InputText v-model="objetivoOng" />
             <label>Objetivo da ONG</label>
+          </FloatLabel>
+
+          <FloatLabel variant="on">
+            <InputText v-model="emailOng" />
+            <label>E-mail da ONG</label>
           </FloatLabel>
 
           <FloatLabel variant="on">
@@ -107,6 +117,14 @@
     </div>
   </div>
 
+  <Dialog v-model:visible="visibleEsqueceu" header="Recuperar senha" modal dismissableMask>
+    <InputMask v-model="esqueceuCnpjOng" mask="99.999.999/9999-99" />
+
+    <div class="flex justify-center pt-5">
+      <Button label="Enviar" class="!bg-[var(--p-primary-950)] !rounded-3xl" @click="esqueceuSenha" />
+    </div>
+  </Dialog>
+
   <Toast position="bottom-right" />
 </template>
 
@@ -116,7 +134,7 @@ import Button from "primevue/button";
 import { onMounted, ref, type Ref } from "vue";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-import { FloatLabel, InputMask, InputText } from "primevue";
+import { Dialog, FloatLabel, InputMask, InputText } from "primevue";
 import { tituloProjeto } from "@/utils";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -131,6 +149,9 @@ const loading: Ref<boolean> = ref(false);
 const login = ref<boolean>(false)
 const cadastro = ref<boolean>(false)
 const proximaEtapa = ref<boolean>(false)
+
+const visibleEsqueceu = ref<boolean>(false);
+const esqueceuCnpjOng: Ref<string> = ref("");
 
 const nomeOng: Ref<string> = ref("");
 const cnpjOng: Ref<string> = ref("");
@@ -166,46 +187,59 @@ const entrar = async () => {
   });
 };
 
-const cadastrar = () => {
+const esqueceuSenha = async () => {
 
-  axios.post('http://localhost:8082/ongs', {
+  toast.add({
+    severity: "info",
+    summary: "Recuperação de senha",
+    detail: "Funcionalidade em desenvolvimento.",
+    life: 3000
+  });
 
-    nome: nomeOng.value,
-    area_autacao: objetivoOng.value,
-    cnpj: cnpjOng.value.replace(/[^\d]/g, ""),
-    cep: ruaOng.value.replace(/[^\d]/g, ""),
-    senha: senhaOng.value,
-    confirmacao_senha: confirSenhaOng.value,
-    email: emailOng.value,
-    telefone: telefoneOng.value.replace(/[^\d]/g, ""),
-    responsavel: nomeResponsavel.value,
-    cpf: cpf.value.replace(/[^\d]/g, "")
+  setTimeout(() => {
+    visibleEsqueceu.value = false
+  }, 3250);
+}
 
-  }).then(function (response) {
+const cadastrar = async () => {
+  try {
+    await axios.post('http://localhost:8082/ongs', {
+      nome: nomeOng.value,
+      area_autacao: objetivoOng.value,
+      cnpj: cnpjOng.value.replace(/[^\d]/g, ""),
+      cep: ruaOng.value.replace(/[^\d]/g, ""),
+      senha: senhaOng.value,
+      confirmacao_senha: confirSenhaOng.value,
+      email: emailOng.value,
+      telefone: telefoneOng.value.replace(/[^\d]/g, ""),
+      responsavel: nomeResponsavel.value,
+      cpf: cpf.value.replace(/[^\d]/g, "")
+    });
+
     toast.add({
       severity: "success",
       summary: "ONG cadastrada com sucesso!",
       detail: "Você já pode fazer o login na plataforma.",
       life: 3000
     });
+
     router.push("/home");
-  }).catch(function (error) {
+  } catch (error) {
     toast.add({
       severity: "error",
-      summary: "Erro ao tentar cadastrar ong.",
+      summary: "Erro ao tentar cadastrar ONG.",
       detail: "Verifique se os dados inseridos estão corretos.",
       life: 3000
     });
-  })
-
-
-
-  setTimeout(() => {
-    login.value = false
-    cadastro.value = false
-    proximaEtapa.value = false
-  }, 3250);
-}
+  }
+  finally {
+    setTimeout(() => {
+      login.value = false
+      cadastro.value = false
+      proximaEtapa.value = false
+    }, 3250);
+  }
+};
 
 const textos = ["Doar é fácil", `${tituloProjeto}`];
 

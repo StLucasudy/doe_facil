@@ -103,7 +103,7 @@ const mostrarDialog = ref(false);
 const colaboradorSelecionado = ref<any>(null);
 
 // dados fictícios ajustados
-const colaboradores = ref([]);
+const colaboradores = ref<any>([]);
 
 // formulário de novo colaborador
 const novoColaborador = ref({
