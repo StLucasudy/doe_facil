@@ -24,10 +24,10 @@
             <label for="user"> Senha </label>
           </FloatLabel>
 
-          <div>
+          <!-- <div>
             Esqueceu a senha? <span @click="visibleEsqueceu = true"
               class="text-[var(--p-primary-700)] underline cursor-pointer">Clique aqui</span>
-          </div>
+          </div> -->
 
           <div class="flex gap-10 w-[72.5%]">
             <Button @click="login = false" label="VOLTAR" class="w-1/2 !rounded-3xl" icon="pi pi-chevron-left"></Button>
@@ -47,10 +47,10 @@
             <label>Objetivo da ONG</label>
           </FloatLabel>
 
-          <FloatLabel variant="on">
+          <!-- <FloatLabel variant="on">
             <InputText v-model="emailOng" />
             <label>E-mail da ONG</label>
-          </FloatLabel>
+          </FloatLabel> -->
 
           <FloatLabel variant="on">
             <InputMask v-model="cnpjOng" mask="99.999.999/9999-99" />
@@ -117,13 +117,13 @@
     </div>
   </div>
 
-  <Dialog v-model:visible="visibleEsqueceu" header="Recuperar senha" modal dismissableMask>
+  <!-- <Dialog v-model:visible="visibleEsqueceu" header="Recuperar senha" modal dismissableMask>
     <InputMask v-model="esqueceuCnpjOng" mask="99.999.999/9999-99" />
 
     <div class="flex justify-center pt-5">
       <Button label="Enviar" class="!bg-[var(--p-primary-950)] !rounded-3xl" @click="esqueceuSenha" />
     </div>
-  </Dialog>
+  </Dialog> -->
 
   <Toast position="bottom-right" />
 </template>
