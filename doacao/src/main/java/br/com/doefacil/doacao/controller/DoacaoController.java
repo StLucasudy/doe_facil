@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/doacao")
+@CrossOrigin(origins = "http://localhost:5173") 
 public class DoacaoController {
 
     IDoeacaoService service;

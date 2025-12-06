@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/endereco")
+@CrossOrigin(origins = "http://localhost:5173") 
 public class EnderecoController {
 
     IEnderecoService enderecoService;

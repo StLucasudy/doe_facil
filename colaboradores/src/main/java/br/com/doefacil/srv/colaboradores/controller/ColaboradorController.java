@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/Colaboradores")
+@CrossOrigin(origins = "http://localhost:5173") 
 public class ColaboradorController {
 
     private IColaboradorService iColaboradorService;
