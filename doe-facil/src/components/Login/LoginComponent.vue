@@ -187,20 +187,6 @@ const entrar = async () => {
   });
 };
 
-const esqueceuSenha = async () => {
-
-  toast.add({
-    severity: "info",
-    summary: "Recuperação de senha",
-    detail: "Funcionalidade em desenvolvimento.",
-    life: 3000
-  });
-
-  setTimeout(() => {
-    visibleEsqueceu.value = false
-  }, 3250);
-}
-
 const cadastrar = async () => {
   try {
     await axios.post('http://localhost:8082/ongs', {

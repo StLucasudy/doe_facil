@@ -134,7 +134,6 @@ function adicionarColaborador() {
             "email": novoColaborador.value.email,
             "telefone": novoColaborador.value.telefone,
             "cargo": novoColaborador.value.cargo,
-            "idEndereco": 1,
             "idOng": idOng
         }
     )

@@ -61,7 +61,7 @@
                     <FloatLabel variant="on">
                         <InputText v-model="doacaoBem" />
                         <label>Opções de Bem</label>
-                    </FloatLabel>eu 
+                    </FloatLabel>
                     <FloatLabel variant="on">
                         <InputText v-model="descricao" />
                         <label>Descrição</label>
@@ -145,7 +145,7 @@ const router = useRouter();
 
 const endpoint = 'http://localhost:8083/doacao';
 const doacaoBem: Ref<string> = ref("");
-const descricao: Ref<string> = ref("Doação monetaria executada.");
+const descricao: Ref<string> = ref("");
 const quantidade: Ref<number> = ref(0);
 const valor: Ref<number> = ref(0);
 const eAnonimo: Ref<boolean> = ref(false);
@@ -166,12 +166,12 @@ const executarDoacaoMonetaria = async () => {
   try {
     const response = await axios.post(endpoint, {
       tipo: "FINANCEIRA",
-      descricao: descricao.value,
+      descricao: `${maneiraDoa.value} - valor: ${valor.value} - recebido por: ${nomeColaborador.value}`,
       valor: valor.value,
       data_doacao: data,
       doador: nomeDoador.value,
       colaborador_nome: nomeColaborador.value,
-      ong_id: "1"
+      ong_id: idOng
     });
 
     toast.add({
@@ -197,12 +197,12 @@ const executarDoacaoBem = async () => {
   try {
     const response = await axios.post(endpoint, {
       tipo: "PRODUTO",
-      descricao: `${doacaoBem.value} - ${descricao.value} - ${quantidade.value}`,
+      descricao: `produto: ${doacaoBem.value} - quantidade: ${quantidade.value} - recebido por: ${nomeColaborador.value}`,
       valor: null,
       data_doacao: data,
       doador: nomeDoador.value,
       colaborador_nome: nomeColaborador.value,
-      ong_id: "1"
+      ong_id: idOng
     });
 
     console.log(response);

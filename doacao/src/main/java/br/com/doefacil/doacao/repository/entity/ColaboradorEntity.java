@@ -20,9 +20,7 @@ public class ColaboradorEntity {
     private String telefone;
     @Column(name = "")
     private String cargo;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "endereco_id", referencedColumnName = "id")
-    private EnderecoEntity endereco;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "ong_id", referencedColumnName = "id")
     private OngsEntity ong;
@@ -37,13 +35,7 @@ public class ColaboradorEntity {
         this.email = email;
         this.telefone = telefone;
         this.cargo = cargo;
-        this.endereco = endereco;
         this.ong = ong;
-    }
-
-
-    public void setEndereco(EnderecoEntity endereco) {
-        this.endereco = endereco;
     }
 
     public void setOng(OngsEntity ong) {
@@ -72,10 +64,6 @@ public class ColaboradorEntity {
 
     public void setCargo(String cargo) {
         this.cargo = cargo;
-    }
-
-    public EnderecoEntity getEndereco() {
-        return endereco;
     }
 
     public OngsEntity getOng() {

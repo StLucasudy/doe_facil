@@ -15,7 +15,6 @@ public record ColaboradorReqDto(
         @Email
         String email,
         @NotBlank
-        //@Pattern("") -> regex para validar o telefone
         String telefone,
         @NotBlank
         String cargo,

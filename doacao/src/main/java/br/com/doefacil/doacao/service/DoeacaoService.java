@@ -27,7 +27,6 @@ public class DoeacaoService implements IDoeacaoService {
     @Override
     public void createDoacao(DoacaoRequestDto req) {
 
-
         Long idOng = Long.parseLong(req.ong_id());
         LocalDate date = LocalDate.parse(req.data_doacao(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
