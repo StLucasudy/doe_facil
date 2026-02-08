@@ -71,10 +71,10 @@
                         <label>Quantidade</label>
                     </FloatLabel>
 
-                    <div class="flex items-center gap-3">
+                    <!-- <div class="flex items-center gap-3">
                         <Checkbox v-model="eAnonimo" />
                         <label>Anônimo</label>
-                    </div>
+                    </div> -->
 
                     <FloatLabel variant="on">
                         <InputText v-model="nomeDoador" />
@@ -110,10 +110,10 @@
                         <label>Maneira de Doação</label>
                     </FloatLabel>
 
-                    <div class="flex items-center gap-3">
+                    <!-- <div class="flex items-center gap-3">
                         <Checkbox v-model="eAnonimo" />
                         <label>Anônimo</label>
-                    </div>
+                    </div> -->
 
                     <FloatLabel variant="on">
                         <InputText v-model="nomeDoador" />
@@ -163,13 +163,17 @@ const doacoes = ref<any>([]);
 executarBuscaDoacoes();
 
 const executarDoacaoMonetaria = async () => {
+
   try {
+
+    let doadorAno = nomeDoador.value == "" ? "Anônimo" : nomeColaborador.value
+
     const response = await axios.post(endpoint, {
       tipo: "FINANCEIRA",
       descricao: `${maneiraDoa.value} - valor: ${valor.value} - recebido por: ${nomeColaborador.value}`,
       valor: valor.value,
       data_doacao: data,
-      doador: nomeDoador.value,
+      doador: doadorAno,
       colaborador_nome: nomeColaborador.value,
       ong_id: idOng
     });
@@ -180,6 +184,8 @@ const executarDoacaoMonetaria = async () => {
       detail: "Você já pode encontrar a doação na plataforma.",
       life: 3000
     });
+
+    console.log(response)
 
     router.push("/home");
   } catch (error) {
@@ -195,12 +201,15 @@ const executarDoacaoMonetaria = async () => {
 
 const executarDoacaoBem = async () => {
   try {
+
+    let doadorAno = nomeDoador.value == "" ? "Anônimo" : nomeColaborador.value
+
     const response = await axios.post(endpoint, {
       tipo: "PRODUTO",
       descricao: `produto: ${doacaoBem.value} - quantidade: ${quantidade.value} - recebido por: ${nomeColaborador.value}`,
       valor: null,
       data_doacao: data,
-      doador: nomeDoador.value,
+      doador: doadorAno,
       colaborador_nome: nomeColaborador.value,
       ong_id: idOng
     });
