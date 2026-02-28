@@ -24,8 +24,8 @@
 
                         <!-- Coluna 2: Código + doador -->
                         <div class="items-end">
-                            <li>Cód: #{{ doacao.id }}</li>
-                            <li><small>por {{ doacao.doador }}</small></li>
+                            <li>Cod: {{ doacao.id }}</li>
+                            <li><small>Doador: {{ doacao.doador }}</small></li>
                         </div>
                     </ul>
                 </div>
@@ -166,11 +166,11 @@ const executarDoacaoMonetaria = async () => {
 
   try {
 
-    let doadorAno = nomeDoador.value == "" ? "Anônimo" : nomeColaborador.value
+    let doadorAno = nomeDoador.value == "" ? "Anônimo" : nomeDoador.value
 
     const response = await axios.post(endpoint, {
       tipo: "FINANCEIRA",
-      descricao: `${maneiraDoa.value} - valor: ${valor.value} - recebido por: ${nomeColaborador.value}`,
+      descricao: `${maneiraDoa.value} - valor:R$ ${valor.value} - recebido por: ${nomeColaborador.value}`,
       valor: valor.value,
       data_doacao: data,
       doador: doadorAno,
@@ -202,7 +202,7 @@ const executarDoacaoMonetaria = async () => {
 const executarDoacaoBem = async () => {
   try {
 
-    let doadorAno = nomeDoador.value == "" ? "Anônimo" : nomeColaborador.value
+    let doadorAno = nomeDoador.value == "" ? "Anônimo" : nomeDoador.value
 
     const response = await axios.post(endpoint, {
       tipo: "PRODUTO",
